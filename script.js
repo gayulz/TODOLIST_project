@@ -1,6 +1,3 @@
-const env = require('dotenv');
-env.config({path: '.env'});
-
 
 const todoInput = document.querySelector('#todo-input');
 const todoList = document.querySelector('#todo-list');
@@ -104,28 +101,23 @@ const weatherDataActive = function ({ location, weather }) {
   }
 };
 
-
+// weather API 
+// ? 앞까진 도메인 및 Path이다 , 구성 : 도메인 / path / ? / 파라미터 
+// lat , lon 위도 경도의 약자 
 const weatherSearch = function ({ latitude, longitude }) {
-    // weather API 
-    // ? 앞까진 도메인 및 Path이다 , 구성 : 도메인 / path / ? / 파라미터 
-    // lat , lon 위도 경도의 약자 
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.API_KEY}`
-  )
-    .then((res) => {
-      return res.json();
-    })
+  fetch(`/weather?latitude=${latitude}&longitude=${longitude}`)
+    .then((res) => res.json())
     .then((json) => {
-      const weatherData = {
+      weatherDataActive({
         location: json.name,
         weather: json.weather[0].main,
-      };
-      weatherDataActive(weatherData);
+      });
     })
     .catch((err) => {
       console.log(err);
     });
 };
+
 
 
 const accessToGeo = function ({ coords }) {
